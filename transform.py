@@ -17,12 +17,16 @@ domain = s[1]
 #print("Username: " + username)
 #print("Domain: " + domain)
 
+
+# Create Maltego Transform object
+malt = MaltegoTransform()
+
 # Check if the domain is "um.es"
-#if domain != "um.es":
-	#print("The domain is different from um.es")
+if domain != "um.es":
 	# Launch maltego exception if not
 	# TODO
-	# maltegoTransform.addException("The domain is different from um.es")
+	malt.addException("This transform only works with @um.es emails!")
+	sys.exit("This transform only works with @um.es emails!")
 
 # Make the search in the UM directory and store the webpage obtained as a result
 r = requests.get('https://www.um.es/atica/directorio/?nivel=&lang=0&vista=unidades&search=' + username)
@@ -44,8 +48,6 @@ if numEntries is not None:
 
 	# Find the URLs
 	peoplebox = soup.findAll('td', attrs={'class': 'elemInfo2'})[1]
-	#peopletable = peoplebox.text
-	# print peoplebox
 
 	s = BeautifulSoup(str(peoplebox), 'html.parser')
 	for link in s.findAll('a'):
@@ -69,9 +71,6 @@ else:
 	despachoIndex = table.find('Despacho:', 0 ,len(table))
 	filiacionIndex = table.find('Filiaci', 0 ,len(table))
 	webIndex = table.find('institucional:', 0, len(table))
-
-	# Create Maltego Transform object
-	malt = MaltegoTransform()
 
 	# Exctract the data
 	lastIndex = len(table)
